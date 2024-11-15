@@ -11,11 +11,32 @@ import (
 	"net/http"
 	"strings"
 	"time"
+	"crypto/sha256"
+	"github.com/lib-x/edgetts/internal/businessConsts"
 )
 
-const (
-	wssUrl = `wss://speech.platform.bing.com/consumer/speech/synthesize/readaloud/edge/v1?TrustedClientToken=6A5AA1D4EAFF4E9FB37E23D68491D6F4&ConnectionId=`
-)
+func GenerateSecMsGecToken() string {
+	now := time.Now().UTC()
+	ticks := (now.Unix() + 11644473600) * 10000000
+	ticks = ticks - (ticks % 3_000_000_000)
+
+	strToHash := fmt.Sprintf("%d%s", ticks, businessConsts.TrustedClientToken)
+	hash := sha256.New()
+	hash.Write([]byte(strToHash))
+	hexDig := fmt.Sprintf("%X", hash.Sum(nil))
+	return hexDig
+}
+
+// GenerateSecMsGecVersion  Sec-MS-GEC-Version token
+func GenerateSecMsGecVersion() string {
+	return fmt.Sprintf("1-%s", businessConsts.ChromiumFllVersion)
+}
+
+
+
+// const (
+// 	wssUrl = `wss://speech.platform.bing.com/consumer/speech/synthesize/readaloud/edge/v1?TrustedClientToken=6A5AA1D4EAFF4E9FB37E23D68491D6F4&ConnectionId=`
+// )
 
 type TTS struct {
 	DnsLookupEnabled bool // 使用DNS解析，而不是北京微软云节点。
@@ -71,6 +92,11 @@ func (t *TTS) NewConn() error {
 
 	var err error
 	var resp *http.Response
+	// 在运行时构建WSS URL
+	wssUrl = "wss://speech.platform.bing.com/consumer/speech/synthesize/readaloud/edge/v1?TrustedClientToken=6A5AA1D4EAFF4E9FB37E23D68491D6F4" +
+		"&Sec-MS-GEC=" + GenerateSecMsGecToken() +
+		"&Sec-MS-GEC-Version=" + GenerateSecMsGecVersion() +
+		"&ConnectionId="
 	t.conn, resp, err = dl.DialContext(ctx, wssUrl+t.uuid, header)
 	if err != nil {
 		if resp == nil {
