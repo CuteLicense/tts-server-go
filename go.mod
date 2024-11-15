@@ -1,4 +1,4 @@
-module github.com/jing332/tts-server-go
+module github.com/CuteLicense/tts-server-go
 
 go 1.19
 
