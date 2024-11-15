@@ -3,7 +3,7 @@ package server
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/jing332/tts-server-go/tts"
+	"github.com/CuteLicense/tts-server-go/tts"
 	log "github.com/sirupsen/logrus"
 	"strconv"
 	"strings"
