@@ -12,15 +12,15 @@ import (
 	"strings"
 	"time"
 	"crypto/sha256"
-	"./businessConsts"
 )
 
 func GenerateSecMsGecToken() string {
 	now := time.Now().UTC()
 	ticks := (now.Unix() + 11644473600) * 10000000
 	ticks = ticks - (ticks % 3_000_000_000)
+	trustedClientToken := "6A5AA1D4EAFF4E9FB37E23D68491D6F4"
 
-	strToHash := fmt.Sprintf("%d%s", ticks, businessConsts.TrustedClientToken)
+	strToHash := fmt.Sprintf("%d%s", ticks, trustedClientToken)
 	hash := sha256.New()
 	hash.Write([]byte(strToHash))
 	hexDig := fmt.Sprintf("%X", hash.Sum(nil))
@@ -29,7 +29,8 @@ func GenerateSecMsGecToken() string {
 
 // GenerateSecMsGecVersion  Sec-MS-GEC-Version token
 func GenerateSecMsGecVersion() string {
-	return fmt.Sprintf("1-%s", businessConsts.ChromiumFllVersion)
+	chromiumFllVersion := "130.0.2849.68"
+	return fmt.Sprintf("1-%s", chromiumFllVersion)
 }
 
 
