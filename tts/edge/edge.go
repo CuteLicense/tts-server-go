@@ -93,8 +93,8 @@ func (t *TTS) NewConn() error {
 
 	var err error
 	var resp *http.Response
-	// 在运行时构建WSS URL
-	wssUrl = "wss://speech.platform.bing.com/consumer/speech/synthesize/readaloud/edge/v1?TrustedClientToken=6A5AA1D4EAFF4E9FB37E23D68491D6F4" +
+	// 在运行时构建WSS URL  
+	var wssUrl string = "wss://speech.platform.bing.com/consumer/speech/synthesize/readaloud/edge/v1?TrustedClientToken=6A5AA1D4EAFF4E9FB37E23D68491D6F4" +
 		"&Sec-MS-GEC=" + GenerateSecMsGecToken() +
 		"&Sec-MS-GEC-Version=" + GenerateSecMsGecVersion() +
 		"&ConnectionId="
