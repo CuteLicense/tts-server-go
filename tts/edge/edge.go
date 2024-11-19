@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 	"crypto/sha256"
-	"github.com/lib-x/edgetts/internal/businessConsts"
+	"./businessConsts"
 )
 
 func GenerateSecMsGecToken() string {
