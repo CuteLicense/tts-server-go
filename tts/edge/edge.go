@@ -79,10 +79,14 @@ func (t *TTS) NewConn() error {
 		}
 	}
 
+	secMsGecVersion := GenerateSecMsGecVersion()
+	chromiumFullVersion := strings.TrimPrefix(secMsGecVersion, "1-")
+	chromiumMajorVersion := strings.Split(chromiumFullVersion, ".")[0]
+	
 	header := http.Header{}
 	header.Set("Accept-Encoding", "gzip, deflate, br")
 	header.Set("Origin", "chrome-extension://jdiccldimpdaibmpdkjnbmckianbfold")
-	header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.66 Safari/537.36 Edg/103.0.1264.44")
+	header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/" + chromiumMajorVersion + ".0.0.0 Safari/537.36 Edg/" + chromiumMajorVersion + ".0.0.0")
 
 	var ctx context.Context
 	ctx, t.dialContextCancel = context.WithTimeout(context.Background(), t.DialTimeout)
@@ -96,7 +100,7 @@ func (t *TTS) NewConn() error {
 	// 在运行时构建WSS URL  
 	var wssUrl string = "wss://speech.platform.bing.com/consumer/speech/synthesize/readaloud/edge/v1?TrustedClientToken=6A5AA1D4EAFF4E9FB37E23D68491D6F4" +
 		"&Sec-MS-GEC=" + GenerateSecMsGecToken() +
-		"&Sec-MS-GEC-Version=" + GenerateSecMsGecVersion() +
+		"&Sec-MS-GEC-Version=" + secMsGecVersion +
 		"&ConnectionId="
 	t.conn, resp, err = dl.DialContext(ctx, wssUrl+t.uuid, header)
 	if err != nil {
