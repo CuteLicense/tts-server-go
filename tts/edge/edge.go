@@ -100,7 +100,7 @@ func (t *TTS) NewConn() error {
 	// 在运行时构建WSS URL  
 	var wssUrl string = "wss://speech.platform.bing.com/consumer/speech/synthesize/readaloud/edge/v1?TrustedClientToken=6A5AA1D4EAFF4E9FB37E23D68491D6F4" +
 		"&Sec-MS-GEC=" + GenerateSecMsGecToken() +
-		"&Sec-MS-GEC-Version=" + secMsGecVersion +
+		"&Sec-MS-GEC-Version=" + GenerateSecMsGecVersion() +
 		"&ConnectionId="
 	t.conn, resp, err = dl.DialContext(ctx, wssUrl+t.uuid, header)
 	if err != nil {
